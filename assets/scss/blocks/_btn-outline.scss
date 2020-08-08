@@ -1,0 +1,16 @@
+.btn-outline {
+  @apply bg-transparent;
+  @apply text-neutral-lighter;
+  @apply px-3;
+  @apply py-1;
+  border: 1px theme('colors.neutral.lighter') solid;
+  // border-radius: 3px;
+
+  @at-root #{&}--primary {
+    @extend .btn-outline;
+    &:hover {
+      @apply text-primary;
+      border: 1px theme('colors.primary') solid;
+    }
+  }
+}

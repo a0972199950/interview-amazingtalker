@@ -1,0 +1,11 @@
+.card {
+  @at-root #{&}__header {
+    @apply pt-2;
+    @apply pb-3;
+  }
+
+  @at-root #{&}__title {
+    @apply text-xl;
+    @apply font-medium;
+  }
+}

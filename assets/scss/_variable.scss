@@ -1,0 +1,13 @@
+:root {
+  --color-primary: #02cab9;
+  --color-neutral-lighter: #b6b6b6;
+  --color-neutral-lightest: #ffffff;
+  --color-neutral-darkest: #000000;
+}
+
+[data-theme="dark"] {
+  --color-primary: #02cab9;
+  --color-neutral-lighter: #b6b6b6;
+  --color-neutral-lightest: #000000;
+  --color-neutral-darkest: #ffffff;
+}
