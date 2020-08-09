@@ -2,12 +2,12 @@ import ScheduleDAO from '../dao/ScheduleDAO'
 
 interface IGetScheduleQuery {
   teacherId: string
-  startTimestamp: number
-  endTimestamp: number
+  startTimestamp: string
+  endTimestamp: string
 }
 
 class ScheduleService {
-  public static async getSchedule (query: IGetScheduleQuery) {
+  public static getSchedule (query: IGetScheduleQuery) {
     const data = ScheduleDAO.get(query)
 
     return data

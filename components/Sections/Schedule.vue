@@ -1,10 +1,10 @@
 <template>
-  <div class="card-schedule">
+  <div class="section-schedule">
     <Card :title="t('title')">
       <!-- 週曆 filter -->
-      <div class="card-schedule__filter">
+      <div class="section-schedule__filter">
 
-        <div class="card-schedule__week-picker">
+        <div class="section-schedule__week-picker">
           <div class="button-group">
             <button
               class="btn-primary-outline"
@@ -43,31 +43,31 @@ import flatMap from 'lodash-es/flatMap'
 
 @Component({
   components: {
-    Card: () => import('~/components/Cards/index.vue'),
+    Card: () => import('~/components/Sections/index.vue'),
     WidgetWeekCalendar: () => import('~/components/Widgets/WeekCalendar.vue')
   }
 })
-export default class CCardsCardSchedule extends Vue {
+export default class CSectionsSchedule extends Vue {
   @Getter('timezone') currentTimezone!: string
 
   @Prop({ type: String, required: true }) teacherId!: string
 
   ready: boolean = false
-  currentWeek: number = this.$dayjs().tz(this.currentTimezone).week()
-  week: number = this.$dayjs().tz(this.currentTimezone).week()
+  currentWeek: number = this.$dayjs().week()
+  week: number = this.$dayjs().week()
   scheduleData: ISchedule[] = []
 
   get startOfWeek () {
     const { currentTimezone, week, $dayjs } = this
 
-    return $dayjs().tz(currentTimezone).week(week).startOf('week').format('YYYY-MM-DD')
+    return $dayjs().week(week).startOf('week').format('YYYY-MM-DD')
   }
 
   get endOfWeek () {
     const { currentTimezone, startOfWeek, week, $dayjs } = this
-    const endOfWeek = $dayjs().tz(currentTimezone).week(week).endOf('week')
+    const endOfWeek = $dayjs().week(week).endOf('week')
 
-    if ($dayjs(startOfWeek).tz(currentTimezone).isSame(endOfWeek, 'month')) {
+    if ($dayjs(startOfWeek).isSame(endOfWeek, 'month')) {
       return endOfWeek.format('DD')
     } else {
       return endOfWeek.format('YYYY-MM-DD')
@@ -94,10 +94,10 @@ export default class CCardsCardSchedule extends Vue {
 
     // 若檢視時間為當周，預計 API 不會 response 早於當下時間的資料
     const startTimestamp = week > currentWeek
-      ? $dayjs().tz(currentTimezone).week(week).startOf('week').valueOf()
-      : $dayjs().tz(currentTimezone).valueOf()
+      ? $dayjs().week(week).startOf('week').valueOf()
+      : $dayjs().valueOf()
 
-    const endTimestamp = $dayjs().tz(currentTimezone).week(week).endOf('week').valueOf()
+    const endTimestamp = $dayjs().week(week).endOf('week').valueOf()
 
     const { data: resSchedule } = await this.$axios.$get('/api/schedule', {
       params: {
@@ -115,7 +115,7 @@ export default class CCardsCardSchedule extends Vue {
     const blankSchedule: ISchedule[] = []
     for(let weekday = 0; weekday < 7; weekday++) {
       blankSchedule.push({
-        date: $dayjs().tz(currentTimezone).week(week).weekday(weekday).format('YYYY-MM-DD'),
+        date: $dayjs().week(week).weekday(weekday).format('YYYY-MM-DD'),
         schedule: []
       })
     }
@@ -124,14 +124,14 @@ export default class CCardsCardSchedule extends Vue {
       flatMap(resSchedule, (value, key) => {
         return value
           // 只留未來的資料。因應 API 無腦吐假資料，不會做 query，這裡由前端做 filter
-          .filter(item => $dayjs().tz(currentTimezone).isBefore(item.start, 'minute'))
+          .filter(item => $dayjs().isBefore(item.start, 'minute'))
           .map(item => ({
             status: key.toUpperCase(),
             ...item
           }))
       })
       .reduce((sum, schedule) => {
-        const date = $dayjs(schedule.start).tz(currentTimezone).format('YYYY-MM-DD')
+        const date = $dayjs(schedule.start).format('YYYY-MM-DD')
         const dateItem = sum.filter(item => item.date === date)[0]
 
         if (dateItem) {

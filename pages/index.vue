@@ -27,7 +27,7 @@
     </select>
 
     <div>
-      <CardSchedule :teacher-id="teacherId" />
+      <SectionSchedule :teacher-id="teacherId" />
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ import { NuxtVueI18n } from 'nuxt-i18n'
 
 @Component({
   components: {
-    CardSchedule: () => import('~/components/Cards/CardSchedule.vue')
+    SectionSchedule: () => import('~/components/Sections/Schedule.vue')
   }
 })
 export default class PIndex extends Vue {

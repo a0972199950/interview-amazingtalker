@@ -7,19 +7,19 @@
         v-for="dayData in scheduleData"
         :key="dayData.date"
         class="week-calendar__day"
-        :class="{ 'past-day': $dayjs(dayData.date).tz(currentTimezone).isBefore($dayjs().tz(currentTimezone), 'day') }"
+        :class="{ 'past-day': $dayjs(dayData.date).isBefore($dayjs(), 'day') }"
       >
         <div class="week-calendar__day-title">
-          <p>{{ $dayjs(dayData.date).tz(currentTimezone).format('ddd') }}</p>
-          <p>{{ $dayjs(dayData.date).tz(currentTimezone).format('DD') }}</p>
+          <p>{{ $dayjs(dayData.date).format('ddd') }}</p>
+          <p>{{ $dayjs(dayData.date).format('DD') }}</p>
         </div>
 
         <p
           v-for="schedule in dayData.schedule"
-          :key="$dayjs(schedule.start).tz(currentTimezone).unix()"
+          :key="$dayjs(schedule.start).unix()"
           :class="schedule.status === 'AVALIABLE' ? 'week-calendar__time--avaliable' : 'week-calendar__time--booked'"
         >
-          {{ $dayjs(schedule.start).tz(currentTimezone).format('HH:mm') }}
+          {{ $dayjs(schedule.start).format('HH:mm') }}
         </p>
       </div>
     </div>

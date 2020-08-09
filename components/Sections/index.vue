@@ -1,10 +1,10 @@
 <template>
-  <div class="card">
-    <div class="card__header">
-      <h1 class="card__title">{{ title }}</h1>
+  <div class="section">
+    <div class="section__header">
+      <h1 class="section__title">{{ title }}</h1>
     </div>
 
-    <div class="card__body">
+    <div class="section__body">
       <slot />
     </div>
     
