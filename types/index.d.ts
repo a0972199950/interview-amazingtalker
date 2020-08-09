@@ -5,3 +5,9 @@ declare module 'vue/types/vue' {
     $axios: NuxtAxiosInstance
   }
 }
+
+declare module 'vuex/types' {
+  interface Store <S> {
+    $cookies: any
+  }
+}

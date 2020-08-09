@@ -1,13 +1,28 @@
 .button-group {
-  display: table;
-  border-collapse: collapse;
+  display: flex;
 
-  @at-root #{&}__row {
-    display: table-row;
+  >button {
+    display: block;
+    margin-right: -1px;
+    margin-left: 0;
 
-    >button {
-      display: table-cell;
+    &:hover {
+      position: relative;
+      z-index: 1;
+    }
+
+    &:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &:not(:first-child):not(:last-child) {
+      border-radius: 0;
     }
   }
-
 }

@@ -1,0 +1,51 @@
+$btn-config:(
+  primary: (
+    class: 'primary',
+    text-color: theme('colors.neutral.lightest'),
+    bg-color: theme('colors.primary')
+  )
+);
+
+%btn-base {
+  @apply px-4;
+  @apply py-1;
+
+  display: inline-block;
+  text-align: center;
+  border-radius: 3px;
+  transition: background-color .15s;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+};
+
+@each $name, $value in $btn-config {
+  $class: map-get($value, class);
+  $text-color: map-get($value, text-color);
+  $bg-color: map-get($value, bg-color);
+
+  .btn-#{$class} {
+    @extend %btn-base;
+
+    background: $bg-color;
+    color: $text-color;
+    border: 1px $bg-color solid;
+  }
+
+  .btn-#{$class}-outline {
+    @extend %btn-base;
+
+    background: transparent;
+    color: theme('colors.neutral.lighter');
+    border: 1px theme('colors.neutral.lighter') solid;
+
+    &:hover:not(:disabled), &.active:not(:disabled) {
+      color: $bg-color;
+      border: 1px $bg-color solid;
+    }
+  }
+}

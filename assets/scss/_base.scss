@@ -6,3 +6,11 @@ body {
   @apply bg-neutral-lightest;
   font-family: Helvetica Neue,Helvetica,Arial,PingFang HK,\.PingFang-SC-Regular,PingFang,Hiragino Sans GB,STHeiti,Microsoft JhengHei,sans-serif;
 }
+
+select, input {
+  @apply bg-neutral-lightest;
+}
+
+button:focus {
+  outline: none;
+}

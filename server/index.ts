@@ -1,12 +1,12 @@
 import express from 'express'
-import { schedule } from './util/dummyData'
+import cookieParser from 'cookie-parser'
+import router from "./routers/index"
 
 const app = express()
 
-app.get('/schedule', (req, res) => {
-  const data = schedule
+app.use(express.json())
+app.use(cookieParser())
 
-  res.json({ data })
-})
+app.use("/", router)
 
 export default { path: '/api', handler: app }

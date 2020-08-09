@@ -1,0 +1,44 @@
+.week-calendar {
+  @at-root #{&}__week {
+    @apply flex;
+    @apply justify-between;
+    @apply items-start;
+  }
+
+  @at-root #{&}__day {
+    @apply mx-1;
+    @apply flex-grow;
+    @apply text-center;
+    @apply pt-2;
+
+    border-top: 4px theme('colors.primary') solid;
+
+    &.past-day {
+      border-top: 4px theme('colors.neutral.lighter') solid;
+      color: theme('colors.neutral.lighter');
+      opacity: .68;
+    }
+  }
+
+  @at-root #{&}__day-title {
+    @apply py-2;
+
+    color: inherit;
+  }
+
+  @at-root #{&}__time {
+    @apply text-xs;
+    @apply py-1;
+
+    @at-root #{&}--avaliable {
+      @extend .week-calendar__time;
+      @apply text-primary;
+    }
+
+    @at-root #{&}--booked {
+      @extend .week-calendar__time;
+      @apply text-neutral-lighter;
+    }
+  }
+
+}
