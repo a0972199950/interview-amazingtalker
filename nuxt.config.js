@@ -25,7 +25,8 @@ export default {
   plugins: [
     '~/plugins/dayjs',
     '~/plugins/font-awesome',
-    '~/plugins/helpers'
+    '~/plugins/helpers',
+    '~/plugins/moment'
   ],
 
   components: true,
@@ -33,7 +34,19 @@ export default {
   buildModules: [
     '@nuxt/typescript-build',
     '@nuxtjs/tailwindcss',
+    // '@nuxtjs/moment',
   ],
+
+  moment: {
+    localesToKeep: ['zh-tw', 'en', 'ja'],
+    defaultLocale: 'zh-tw',
+    timezone: {
+      matchZones: ['Asia/Taipei', 'America/New_York', 'Asia/Tokyo'],
+      startYear: 2000,
+      endYear: 2030
+    }
+  },
+
   tailwindcss: {
     cssPath: '~/assets/scss/app.scss'
   },

@@ -1,13 +1,21 @@
 <template>
   <div>
-    <button
-      v-for="locale in availableLocales"
-      :key="locale.code"
-      @click="$i18n.setLocale(locale.code)">
-      {{ locale.name }}
-    </button>
+    <div class="row">
+      <div class="col-4">
+        美國
+        <MomentEn />
+      </div>
 
-    <h1>{{ $t('title') }}</h1>
+      <div class="col-4">
+        台灣
+        <MomentZhTw />
+      </div>
+
+      <div class="col-4">
+        日本
+        <MomentJa />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,15 +23,17 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import { NuxtVueI18n } from 'nuxt-i18n'
 
-@Component
-export default class PTest extends Vue {
-  created () {
-    // console.log(this.setLocale)
-    console.log(this.$i18n.setLocale)
-    console.log(this.switchLocalePath)
+@Component({
+  components: {
+    MomentEn: () => import('~/components/Test/MomentEn.vue'),
+    MomentZhTw: () => import('~/components/Test/MomentZhTw.vue'),
+    MomentJa: () => import('~/components/Test/MomentJa.vue')
   }
-  get availableLocales () {
-    return this.$i18n.locales!.filter(i => (i as NuxtVueI18n.Options.LocaleObject).code !== this.$i18n.locale)
+})
+export default class PTest extends Vue {
+  mounted () {
+    Object.assign(window, { moment: this.$moment })
   }
 }
 </script>
+
