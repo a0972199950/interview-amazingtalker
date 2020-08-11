@@ -46,7 +46,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Getter } from 'nuxt-property-decorator'
-import flatMap from 'lodash-es/flatMap'
 
 @Component({
   components: {
@@ -122,13 +121,16 @@ export default class CSectionsSchedule extends Vue {
       })
     }
 
-    const schedules = 
-      flatMap(resSchedule, (value, key) => {
-        return value.map(item => ({
-          status: key.toUpperCase(),
-          ...item
+    const schedules = Object
+      .entries(resSchedule)
+      .reduce((accumulator, [status, schedules]) => {
+        const mappedSchedules = schedules.map((schedule: ITimeset) => ({
+          status: status.toUpperCase(),
+          ...schedule
         }))
-      })
+
+        return accumulator.concat(mappedSchedules)
+      }, ([] as ISchedule['schedule']))
       .sort((a, b) => {
         const startTimestampA = $moment(a.start).valueOf()
         const startTimestampB = $moment(b.start).valueOf()
@@ -137,15 +139,15 @@ export default class CSectionsSchedule extends Vue {
         if (startTimestampA > startTimestampB) { return 1 }
         return 0
       })
-      .reduce((sum, schedule) => {
+      .reduce((accumulator, schedule) => {
         const date = $moment(schedule.start).format('YYYY-MM-DD')
-        const dateItem = sum.filter(item => item.date === date)[0]
+        const dateItem = accumulator.filter(item => item.date === date)[0]
 
         if (dateItem) {
           dateItem.schedule.push(schedule)
         }
 
-        return sum
+        return accumulator
       }, blankSchedule)
 
     return schedules

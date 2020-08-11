@@ -1,11 +1,9 @@
-interface IResSchedule {
-  avaliable: {
-    start: string
-    end: string
-  }[]
+interface ITimeset {
+  start: string
+  end: string
+}
 
-  booked: {
-    start: string
-    end: string
-  }[]
+interface IResSchedule {
+  avaliable: ITimeset[]
+  booked: ITimeset[]
 }
