@@ -25,10 +25,11 @@
           <span>{{ startOfWeek }} - {{ endOfWeek }}</span>
         </div>
 
-        <span>{{ t('note', { timezone: '台北 (+08:00)' }) }}</span>
+        <span>{{ t('note', { timezone: `${$moment().format('z')} (${$moment().format('Z')})` }) }}</span>
 
       </div>
 
+      <!-- 週曆 -->
       <WidgetWeekCalendar
         v-if="ready"
         :schedule-data="scheduleData"
@@ -53,21 +54,21 @@ export default class CSectionsSchedule extends Vue {
   @Prop({ type: String, required: true }) teacherId!: string
 
   ready: boolean = false
-  currentWeek: number = this.$dayjs().week()
-  week: number = this.$dayjs().week()
+  currentWeek: number = this.$moment().week()
+  week: number = this.$moment().week()
   scheduleData: ISchedule[] = []
 
   get startOfWeek () {
-    const { currentTimezone, week, $dayjs } = this
+    const { currentTimezone, week, $moment } = this
 
-    return $dayjs().week(week).startOf('week').format('YYYY-MM-DD')
+    return $moment().week(week).startOf('week').format('YYYY-MM-DD')
   }
 
   get endOfWeek () {
-    const { currentTimezone, startOfWeek, week, $dayjs } = this
-    const endOfWeek = $dayjs().week(week).endOf('week')
+    const { currentTimezone, startOfWeek, week, $moment } = this
+    const endOfWeek = $moment().week(week).endOf('week')
 
-    if ($dayjs(startOfWeek).isSame(endOfWeek, 'month')) {
+    if ($moment(startOfWeek).isSame(endOfWeek, 'month')) {
       return endOfWeek.format('DD')
     } else {
       return endOfWeek.format('YYYY-MM-DD')
@@ -86,18 +87,18 @@ export default class CSectionsSchedule extends Vue {
   }
 
   mounted () {
-    Object.assign(window, { dayjs: this.$dayjs })
+    Object.assign(window, { moment: this.$moment })
   }
 
   async fetchData () {
-    const { $dayjs, week, currentWeek, currentTimezone } = this
+    const { $moment, week, currentWeek, currentTimezone } = this
 
     // 若檢視時間為當周，預計 API 不會 response 早於當下時間的資料
     const startTimestamp = week > currentWeek
-      ? $dayjs().week(week).startOf('week').valueOf()
-      : $dayjs().valueOf()
+      ? $moment().week(week).startOf('week').valueOf()
+      : $moment().valueOf()
 
-    const endTimestamp = $dayjs().week(week).endOf('week').valueOf()
+    const endTimestamp = $moment().week(week).endOf('week').valueOf()
 
     const { data: resSchedule } = await this.$axios.$get('/api/schedule', {
       params: {
@@ -110,28 +111,25 @@ export default class CSectionsSchedule extends Vue {
   }
 
   mapData (resSchedule: IResSchedule) {
-    const { $dayjs, week, currentTimezone } = this
+    const { $moment, week, currentTimezone } = this
 
     const blankSchedule: ISchedule[] = []
     for(let weekday = 0; weekday < 7; weekday++) {
       blankSchedule.push({
-        date: $dayjs().week(week).weekday(weekday).format('YYYY-MM-DD'),
+        date: $moment().week(week).weekday(weekday).format('YYYY-MM-DD'),
         schedule: []
       })
     }
 
     const schedules = 
       flatMap(resSchedule, (value, key) => {
-        return value
-          // 只留未來的資料。因應 API 無腦吐假資料，不會做 query，這裡由前端做 filter
-          .filter(item => $dayjs().isBefore(item.start, 'minute'))
-          .map(item => ({
-            status: key.toUpperCase(),
-            ...item
-          }))
+        return value.map(item => ({
+          status: key.toUpperCase(),
+          ...item
+        }))
       })
       .reduce((sum, schedule) => {
-        const date = $dayjs(schedule.start).format('YYYY-MM-DD')
+        const date = $moment(schedule.start).format('YYYY-MM-DD')
         const dateItem = sum.filter(item => item.date === date)[0]
 
         if (dateItem) {
@@ -140,6 +138,18 @@ export default class CSectionsSchedule extends Vue {
 
         return sum
       }, blankSchedule)
+      .map(item => {
+        item.schedule = item.schedule.sort((a, b) => {
+          const startTimestampA = $moment(a.start).valueOf()
+          const startTimestampB = $moment(b.start).valueOf()
+
+          if (startTimestampA < startTimestampB) { return -1 }
+          if (startTimestampA > startTimestampB) { return 1 }
+          return 0
+        })
+
+        return item
+      })
 
     return schedules
   }

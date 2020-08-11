@@ -23,9 +23,9 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/dayjs',
     '~/plugins/font-awesome',
-    '~/plugins/helpers'
+    '~/plugins/helpers',
+    '~/plugins/moment'
   ],
 
   components: true,
@@ -34,21 +34,16 @@ export default {
     '@nuxt/typescript-build',
     '@nuxtjs/tailwindcss',
   ],
+
   tailwindcss: {
     cssPath: '~/assets/scss/app.scss'
   },
 
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/dayjs',
     'nuxt-i18n',
     'cookie-universal-nuxt'
   ],
-
-  dayjs: {
-    locales: ['zh-tw', 'en', 'ja'],
-    defaultLocale: 'zh-tw'
-  },
 
   i18n: {
     locales: [
