@@ -25,7 +25,13 @@
           <span>{{ startOfWeek }} - {{ endOfWeek }}</span>
         </div>
 
-        <span>{{ t('note', { timezone: `${$moment().format('z')} (${$moment().format('Z')})` }) }}</span>
+        <span>
+          {{ 
+            t('note', {
+              timezone: `${$moment().format('z')} (${$moment().format('Z')})`
+            }) 
+          }}
+        </span>
 
       </div>
 
@@ -86,14 +92,9 @@ export default class CSectionsSchedule extends Vue {
     }
   }
 
-  mounted () {
-    Object.assign(window, { moment: this.$moment })
-  }
-
   async fetchData () {
     const { $moment, week, currentWeek, currentTimezone } = this
 
-    // 若檢視時間為當周，預計 API 不會 response 早於當下時間的資料
     const startTimestamp = week > currentWeek
       ? $moment().week(week).startOf('week').valueOf()
       : $moment().valueOf()
@@ -128,6 +129,14 @@ export default class CSectionsSchedule extends Vue {
           ...item
         }))
       })
+      .sort((a, b) => {
+        const startTimestampA = $moment(a.start).valueOf()
+        const startTimestampB = $moment(b.start).valueOf()
+
+        if (startTimestampA < startTimestampB) { return -1 }
+        if (startTimestampA > startTimestampB) { return 1 }
+        return 0
+      })
       .reduce((sum, schedule) => {
         const date = $moment(schedule.start).format('YYYY-MM-DD')
         const dateItem = sum.filter(item => item.date === date)[0]
@@ -138,18 +147,6 @@ export default class CSectionsSchedule extends Vue {
 
         return sum
       }, blankSchedule)
-      .map(item => {
-        item.schedule = item.schedule.sort((a, b) => {
-          const startTimestampA = $moment(a.start).valueOf()
-          const startTimestampB = $moment(b.start).valueOf()
-
-          if (startTimestampA < startTimestampB) { return -1 }
-          if (startTimestampA > startTimestampB) { return 1 }
-          return 0
-        })
-
-        return item
-      })
 
     return schedules
   }
@@ -179,7 +176,7 @@ export default class CSectionsSchedule extends Vue {
   }
 
   t (node: string, payload?: object) {
-    return this.$helpers.mapI18nText('components.Cards.CardSchedule', node, { ...payload })
+    return this.$helpers.parseTranslation('components.Cards.CardSchedule', node, { ...payload })
   }
 }
 </script>

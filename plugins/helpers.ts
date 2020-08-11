@@ -3,14 +3,14 @@ import { Plugin } from '@nuxt/types'
 declare module 'vue/types/vue' {
   interface Vue {
     $helpers: {
-      mapI18nText: (path: string, node: string, payload?: object) => string
+      parseTranslation: (path: string, node: string, payload?: object) => string
     }
   }
 }
 
 const plugin: Plugin = (ctx, inject) => {
   const helpers = {
-    mapI18nText (path: string, node: string, payload?: any) {
+    parseTranslation (path: string, node: string, payload?: any) {
       const text = String(ctx.app.i18n.t(`${path}.${node}`))
 
       if (!payload) {

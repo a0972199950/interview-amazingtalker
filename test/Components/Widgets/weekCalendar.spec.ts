@@ -1,35 +1,26 @@
+/// <reference types="jest" />
+
 import { mount } from '@vue/test-utils'
 import moment from 'moment-timezone'
-
 import WeekCalendar from '@/components/Widgets/WeekCalendar.vue'
+import { testTime, localeCodes, timezones } from '~/test/utils/variable'
 
-const testTime = '2020-08-15T00:00:00Z'
-
-const enTimezone = 'America/New_York'
-const zhtwTimezone = 'Asia/Taipei'
-
-const enLocale = 'en'
-const zhtwLocale = 'zh-tw'
-
-const testTimeInEN = moment(testTime).locale(enLocale).tz(enTimezone).clone()
-const testTimeInZhtw = moment(testTime).locale(zhtwLocale).tz(zhtwTimezone).clone()
-
+const testTimeEn = moment(testTime).locale(localeCodes.en).tz(timezones.en).clone()
+const testTimeZhTw = moment(testTime).locale(localeCodes.zhTw).tz(timezones.zhTw).clone()
 
 describe('WeekCalendar', () => {
   test('正確渲染台灣時間', () => {
-    moment.tz.setDefault(zhtwTimezone)
-    moment.locale(zhtwLocale)
+    moment.tz.setDefault(timezones.zhTw).locale(localeCodes.zhTw)
 
     const wrapper = mount(WeekCalendar, {
       propsData: {
         scheduleData: [
           {
-            date: testTimeInZhtw.format('YYYY-MM-DD'),
+            date: testTimeZhTw.format('YYYY-MM-DD'),
             schedule: [
               {
                 status: 'AVALIABLE',
-                start: testTime,
-                end: moment(testTime).add(30, 'minutes')
+                start: testTime
               }
             ]
           }
@@ -41,24 +32,22 @@ describe('WeekCalendar', () => {
       }
     })
 
-    expect(wrapper.text()).toContain(testTimeInZhtw.format('HH:mm'))
-    expect(wrapper.text()).toContain(testTimeInZhtw.format('ddd'))
+    expect(wrapper.text()).toContain(testTimeZhTw.format('HH:mm'))
+    expect(wrapper.text()).toContain(testTimeZhTw.format('ddd'))
   })
 
   test('正確渲染美國時間', () => {
-    moment.tz.setDefault(enTimezone)
-    moment.locale(enLocale)
+    moment.tz.setDefault(timezones.en).locale(localeCodes.en)
 
     const wrapper = mount(WeekCalendar, {
       propsData: {
         scheduleData: [
           {
-            date: testTimeInEN.format('YYYY-MM-DD'),
+            date: testTimeEn.format('YYYY-MM-DD'),
             schedule: [
               {
                 status: 'AVALIABLE',
-                start: testTime,
-                end: moment(testTime).add(30, 'minutes')
+                start: testTime
               }
             ]
           }
@@ -70,8 +59,8 @@ describe('WeekCalendar', () => {
       }
     })
 
-    expect(wrapper.text()).toContain(testTimeInEN.format('HH:mm'))
-    expect(wrapper.text()).toContain(testTimeInEN.format('ddd'))
+    expect(wrapper.text()).toContain(testTimeEn.format('HH:mm'))
+    expect(wrapper.text()).toContain(testTimeEn.format('ddd'))
   })
 
   test('avaliable 時段為綠色', () => {
@@ -79,12 +68,11 @@ describe('WeekCalendar', () => {
       propsData: {
         scheduleData: [
           {
-            date: testTimeInZhtw.format('YYYY-MM-DD'),
+            date: moment().format('YYYY-MM-DD'),
             schedule: [
               {
                 status: 'AVALIABLE',
-                start: testTime,
-                end: moment(testTime).add(30, 'minutes')
+                start: testTime
               }
             ]
           }
@@ -104,12 +92,11 @@ describe('WeekCalendar', () => {
       propsData: {
         scheduleData: [
           {
-            date: testTimeInZhtw.format('YYYY-MM-DD'),
+            date: moment().format('YYYY-MM-DD'),
             schedule: [
               {
                 status: 'BOOKED',
-                start: testTime,
-                end: moment(testTime).add(30, 'minutes')
+                start: testTime
               }
             ]
           }

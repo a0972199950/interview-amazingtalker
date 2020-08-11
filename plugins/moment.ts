@@ -8,8 +8,11 @@ declare module 'vue/types/vue' {
 }
 
 const plugin: Plugin = (ctx, inject) => {
-  moment.tz.setDefault(ctx.store.getters['timezone'])
-  moment.locale(ctx.store.getters['locale'])
+  const storeTimezone = ctx.store.getters['timezone']
+  const storeLocale = ctx.store.getters['locale']
+
+  if (storeTimezone) { moment.tz.setDefault(storeTimezone) }
+  if (storeLocale) { moment.locale(storeLocale) }
 
   inject('moment', moment)
 }

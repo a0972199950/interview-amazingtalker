@@ -1,16 +1,14 @@
 .week-calendar {
-  @at-root #{&}__week {
-    @apply flex;
-    @apply justify-between;
-    @apply items-start;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 
   @at-root #{&}__day {
     @apply mx-1;
-    @apply flex-grow;
-    @apply text-center;
     @apply pt-2;
 
+    flex-grow: 1;
+    text-align: center;
     border-top: 4px theme('colors.primary') solid;
 
     &.past-day {

@@ -11,6 +11,8 @@ select, input {
   @apply bg-neutral-lightest;
 }
 
-button:focus {
-  outline: none;
+button, input, select, textarea {
+  &:focus {
+    outline: none;
+  }
 }
