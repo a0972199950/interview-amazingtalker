@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-4">
         美國
         <MomentEn />
@@ -15,7 +15,7 @@
         日本
         <MomentJa />
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

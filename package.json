@@ -17,8 +17,6 @@
     "@fortawesome/vue-fontawesome": "^0.1.10",
     "@nuxt/typescript-runtime": "^1.0.0",
     "@nuxtjs/axios": "^5.12.0",
-    "@nuxtjs/dayjs": "^1.1.9",
-    "@nuxtjs/moment": "^1.6.1",
     "cookie-parser": "^1.4.5",
     "cookie-universal-nuxt": "^2.1.4",
     "lodash-es": "^4.17.15",
@@ -27,7 +25,8 @@
     "nuxt": "^2.14.0",
     "nuxt-i18n": "^6.13.7",
     "nuxt-property-decorator": "^2.7.2",
-    "tailwind-bootstrap-grid": "^2.1.0"
+    "tailwind-bootstrap-grid": "^2.1.0",
+    "vue-carousel": "^0.18.0"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.0",
@@ -35,6 +34,7 @@
     "@nuxtjs/tailwindcss": "^2.1.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/lodash-es": "^4.17.3",
+    "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.13",
     "@vue/test-utils": "^1.0.3",
     "babel-core": "7.0.0-bridge.0",

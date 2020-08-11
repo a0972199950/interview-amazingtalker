@@ -23,7 +23,6 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/dayjs',
     '~/plugins/font-awesome',
     '~/plugins/helpers',
     '~/plugins/moment'
@@ -34,18 +33,7 @@ export default {
   buildModules: [
     '@nuxt/typescript-build',
     '@nuxtjs/tailwindcss',
-    // '@nuxtjs/moment',
   ],
-
-  moment: {
-    localesToKeep: ['zh-tw', 'en', 'ja'],
-    defaultLocale: 'zh-tw',
-    timezone: {
-      matchZones: ['Asia/Taipei', 'America/New_York', 'Asia/Tokyo'],
-      startYear: 2000,
-      endYear: 2030
-    }
-  },
 
   tailwindcss: {
     cssPath: '~/assets/scss/app.scss'
@@ -53,15 +41,9 @@ export default {
 
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/dayjs',
     'nuxt-i18n',
     'cookie-universal-nuxt'
   ],
-
-  dayjs: {
-    locales: ['zh-tw', 'en', 'ja'],
-    defaultLocale: 'zh-tw'
-  },
 
   i18n: {
     locales: [
