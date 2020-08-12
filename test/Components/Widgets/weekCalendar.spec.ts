@@ -34,7 +34,7 @@ describe('WeekCalendar', () => {
     })
 
     expect(wrapper.text()).toContain(testTimeZhTw.format('HH:mm'))
-    expect(wrapper.text()).toContain(testTimeZhTw.format('ddd'))
+    expect(wrapper.text()).toContain(testTimeZhTw.format('dd'))
   })
 
   test('正確渲染美國時間', () => {
@@ -61,7 +61,7 @@ describe('WeekCalendar', () => {
     })
 
     expect(wrapper.text()).toContain(testTimeEn.format('HH:mm'))
-    expect(wrapper.text()).toContain(testTimeEn.format('ddd'))
+    expect(wrapper.text()).toContain(testTimeEn.format('dd'))
   })
 
   test('正確渲染 avaliable time 為綠色；booked time 為灰色', () => {

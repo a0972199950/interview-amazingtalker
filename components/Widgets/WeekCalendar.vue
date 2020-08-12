@@ -8,11 +8,11 @@
         :key="dayData.date"
         class="week-calendar__day"
         :class="{
-          'past-day': $moment(dayData.date).isBefore($moment(), 'day') || dayData.schedule.length <= 0
+          'past-day': !dayData.schedule.some(item => item.status === 'AVALIABLE')
         }"
       >
         <div class="week-calendar__day-title">
-          <p>{{ $moment(dayData.date).format('ddd') }}</p>
+          <p>{{ $moment(dayData.date).format('dd') }}</p>
           <p>{{ $moment(dayData.date).format('DD') }}</p>
         </div>
 
