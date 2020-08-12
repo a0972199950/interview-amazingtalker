@@ -1,39 +1,41 @@
 <template>
   <div class="container">
+    <div class="flex">
     <!-- 語言切換 -->
-    <select
-      :value="currentLocale.code"
-      @change="changeLocale($event.target.value)"
-    >
-      <option :value="currentLocale.code">{{ currentLocale.name }}</option>
-
-      <option
-        v-for="locale in availableLocales"
-        :key="locale.code"
-        :value="locale.code"
+      <select
+        :value="currentLocale.code"
+        @change="changeLocale($event.target.value)"
       >
-        {{ locale.name }}
-      </option>
-    </select>
+        <option :value="currentLocale.code">{{ currentLocale.name }}</option>
 
-    <!-- 時區切換 -->
-    <select
-      :value="currentTimezone"
-      @change="changeTimezone($event.target.value)"
-    >
-      <option value="Asia/Taipei">Asia/Taipei</option>
-      <option value="America/New_York">America/New_York</option>
-      <option value="Asia/Tokyo">Asia/Tokyo</option>
-    </select>
+        <option
+          v-for="locale in availableLocales"
+          :key="locale.code"
+          :value="locale.code"
+        >
+          {{ locale.name }}
+        </option>
+      </select>
 
-    <!-- 主題切換 -->
-    <select
-      v-model="theme"
-      @change="switchTheme"
-    >
-      <option value="default">日間模式</option>
-      <option value="dark">黑暗模式</option>
-    </select>
+      <!-- 時區切換 -->
+      <select
+        :value="currentTimezone"
+        @change="changeTimezone($event.target.value)"
+      >
+        <option value="Asia/Taipei">Asia/Taipei</option>
+        <option value="America/New_York">America/New_York</option>
+        <option value="Asia/Tokyo">Asia/Tokyo</option>
+      </select>
+
+      <!-- 主題切換 -->
+      <select
+        v-model="theme"
+        @change="switchTheme"
+      >
+        <option value="default">日間模式</option>
+        <option value="dark">黑暗模式</option>
+      </select>
+    </div>
 
     <div>
       <SectionSchedule :teacher-id="teacherId" />

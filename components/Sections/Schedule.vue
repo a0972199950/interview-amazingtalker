@@ -5,10 +5,10 @@
       <div class="section-schedule__filter">
 
         <div class="section-schedule__week-picker">
-          <div class="button-group">
+          <div class="button-group order-2 md:order-1">
             <button
               class="btn-primary-outline"
-              :disabled="week <= currentWeek"
+              :disabled="displayWeek <= currentWeek"
               @click="prev"
             >
               <font-awesome-icon :icon="['fas', 'chevron-left']" />
@@ -22,7 +22,14 @@
             </button>
           </div>
 
-          <span>{{ startOfWeek }} - {{ endOfWeek }}</span>
+          <span class="order-1 md:order-2">
+            {{ startDayOfDisplayWeek.format('YYYY-MM-DD') }} - 
+            {{ 
+              $moment(startDayOfDisplayWeek).isSame(endDayOfDisplayWeek, 'month')
+                ? endDayOfDisplayWeek.format('DD')
+                : endDayOfDisplayWeek.format('YYYY-MM-DD') 
+            }}
+          </span>
         </div>
 
         <span>
@@ -38,7 +45,7 @@
       <!-- 週曆 -->
       <WidgetWeekCalendar
         v-if="ready"
-        :schedule-data="scheduleData"
+        :schedule-data="weekScheduleData[displayWeek]"
       />
     </Card>
   </div>
@@ -54,45 +61,52 @@ import { Component, Vue, Prop, Getter } from 'nuxt-property-decorator'
   }
 })
 export default class CSectionsSchedule extends Vue {
-  @Getter('timezone') currentTimezone!: string
-
   @Prop({ type: String, required: true }) teacherId!: string
 
   ready: boolean = false
+  weekScheduleData: IWeekScheduleData = {}
+  preFetchWeeks: number = 1
+  displayWeek: number = this.$moment().week()
   currentWeek: number = this.$moment().week()
-  week: number = this.$moment().week()
-  scheduleData: ISchedule[] = []
 
-  get startOfWeek () {
-    const { currentTimezone, week, $moment } = this
-
-    return $moment().week(week).startOf('week').format('YYYY-MM-DD')
+  get startDayOfDisplayWeek () {
+    return this.$moment().week(this.displayWeek).startOf('week')
   }
 
-  get endOfWeek () {
-    const { currentTimezone, startOfWeek, week, $moment } = this
-    const endOfWeek = $moment().week(week).endOf('week')
-
-    if ($moment(startOfWeek).isSame(endOfWeek, 'month')) {
-      return endOfWeek.format('DD')
-    } else {
-      return endOfWeek.format('YYYY-MM-DD')
-    }
+  get endDayOfDisplayWeek () {
+    return this.$moment().week(this.displayWeek).endOf('week')
   }
 
   async created () {
     this.ready = false
 
     try {
-      await this.fetchData()
+      await this.fillWeekScheduleData()
       this.ready = true
     } catch (e) {
       console.log(e)
     }
   }
 
-  async fetchData () {
-    const { $moment, week, currentWeek, currentTimezone } = this
+  fillWeekScheduleData () {
+    const { displayWeek, preFetchWeeks } = this
+
+    const weekQueue: number[] = []
+    for (let week = displayWeek; week <= displayWeek + preFetchWeeks; week++) {
+      weekQueue.push(week)
+    }
+    return Promise.all(weekQueue.map(async (week) => {
+      if (this.weekScheduleData[week]) { return }
+
+      const weekData = await this.fetchAndParseWeekData(week)
+      this.weekScheduleData = Object.assign({}, this.weekScheduleData, {
+        [week]: weekData
+      })
+    }))
+  }
+
+  async fetchAndParseWeekData (week: number): Promise<IScheduleData[]> {
+    const { $moment, currentWeek } = this
 
     const startTimestamp = week > currentWeek
       ? $moment().week(week).startOf('week').valueOf()
@@ -100,20 +114,20 @@ export default class CSectionsSchedule extends Vue {
 
     const endTimestamp = $moment().week(week).endOf('week').valueOf()
 
-    const { data: resSchedule } = await this.$axios.$get('/api/schedule', {
+    const { data: resSchedule } = await this.$axios.$get<{data: IResSchedule}>('/api/schedule', {
       params: {
         startTimestamp, endTimestamp,
         teacherId: this.teacherId
       }
     })
 
-    this.scheduleData = this.mapData(resSchedule)
+    return this.parseWeekData(resSchedule, week)
   }
 
-  mapData (resSchedule: IResSchedule) {
-    const { $moment, week, currentTimezone } = this
+  parseWeekData (resSchedule: IResSchedule, week: number) {
+    const { $moment } = this
 
-    const blankSchedule: ISchedule[] = []
+    const blankSchedule: IScheduleData[] = []
     for(let weekday = 0; weekday < 7; weekday++) {
       blankSchedule.push({
         date: $moment().week(week).weekday(weekday).format('YYYY-MM-DD'),
@@ -130,7 +144,7 @@ export default class CSectionsSchedule extends Vue {
         }))
 
         return accumulator.concat(mappedSchedules)
-      }, ([] as ISchedule['schedule']))
+      }, ([] as IScheduleData['schedule']))
       .sort((a, b) => {
         const startTimestampA = $moment(a.start).valueOf()
         const startTimestampB = $moment(b.start).valueOf()
@@ -153,28 +167,14 @@ export default class CSectionsSchedule extends Vue {
     return schedules
   }
 
-  async prev () {
-    this.week--
-    this.ready = false
-
-    try {
-      await this.fetchData()
-      this.ready = true
-    } catch (e) {
-      console.log(e)
-    }
+  prev () {
+    this.displayWeek--
+    this.fillWeekScheduleData()
   }
 
-  async next () {
-    this.week++
-    this.ready = false
-
-    try {
-      await this.fetchData()
-      this.ready = true
-    } catch (e) {
-      console.log(e)
-    }
+  next () {
+    this.displayWeek++
+    this.fillWeekScheduleData()
   }
 
   t (node: string, payload?: object) {

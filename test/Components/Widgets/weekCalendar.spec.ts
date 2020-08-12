@@ -2,7 +2,7 @@
 
 import { mount } from '@vue/test-utils'
 import moment from 'moment-timezone'
-import WeekCalendar from '@/components/Widgets/WeekCalendar.vue'
+import WeekCalendar from '~/components/Widgets/WeekCalendar.vue'
 import { testTime, localeCodes, timezones } from '~/test/utils/variable'
 
 const testTimeEn = moment(testTime).locale(localeCodes.en).tz(timezones.en).clone()

@@ -12,6 +12,9 @@ select, input {
 }
 
 button, input, select, textarea {
+  border: 1px theme('colors.neutral.lighter') solid;
+  border-radius: 3px;
+
   &:focus {
     outline: none;
   }

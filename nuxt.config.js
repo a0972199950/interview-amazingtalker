@@ -25,7 +25,8 @@ export default {
   plugins: [
     '~/plugins/font-awesome',
     '~/plugins/helpers',
-    '~/plugins/moment'
+    '~/plugins/moment',
+    '~/plugins/global-components'
   ],
 
   components: true,

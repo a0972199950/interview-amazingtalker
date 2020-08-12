@@ -1,6 +1,5 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
 
 @import 'variable';
 @import 'base';
@@ -10,3 +9,6 @@
 @import 'blocks/sections/section-schedule';
 @import 'blocks/widgets/week-calendar';
 @import 'blocks/button-group';
+@import 'blocks/loading';
+
+@import 'tailwindcss/utilities';
