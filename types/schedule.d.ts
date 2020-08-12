@@ -7,6 +7,6 @@ interface IScheduleData {
   }[]
 }
 
-interface IWeekScheduleData {
+interface IWeeksScheduleData {
   [key: string]: IScheduleData[]
 }

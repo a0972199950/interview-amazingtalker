@@ -5,8 +5,9 @@
       <div class="section-schedule__filter">
 
         <div class="section-schedule__week-picker">
-          <div class="button-group order-2 md:order-1">
+          <div class="button-group order-2 sm:order-1">
             <button
+              data-jest="prev"
               class="btn-primary-outline"
               :disabled="displayWeek <= currentWeek"
               @click="prev"
@@ -15,6 +16,7 @@
             </button>
     
             <button
+              data-jest="next"
               class="btn-primary-outline"
               @click="next"
             >
@@ -22,17 +24,12 @@
             </button>
           </div>
 
-          <span class="order-1 md:order-2">
-            {{ startDayOfDisplayWeek.format('YYYY-MM-DD') }} - 
-            {{ 
-              $moment(startDayOfDisplayWeek).isSame(endDayOfDisplayWeek, 'month')
-                ? endDayOfDisplayWeek.format('DD')
-                : endDayOfDisplayWeek.format('YYYY-MM-DD') 
-            }}
+          <span class="order-1 sm:order-2">
+            {{ startDayOfDisplayWeek }} - {{ endDayOfDisplayWeek }}
           </span>
         </div>
 
-        <span>
+        <span class="section-schedule__notes">
           {{ 
             t('note', {
               timezone: `${$moment().format('z')} (${$moment().format('Z')})`
@@ -45,7 +42,7 @@
       <!-- 週曆 -->
       <WidgetWeekCalendar
         v-if="ready"
-        :schedule-data="weekScheduleData[displayWeek]"
+        :schedule-data="weeksScheduleData[displayWeek]"
       />
     </Card>
   </div>
@@ -64,42 +61,50 @@ export default class CSectionsSchedule extends Vue {
   @Prop({ type: String, required: true }) teacherId!: string
 
   ready: boolean = false
-  weekScheduleData: IWeekScheduleData = {}
+  weeksScheduleData: IWeeksScheduleData = {}
   preFetchWeeks: number = 1
-  displayWeek: number = this.$moment().week()
-  currentWeek: number = this.$moment().week()
+  displayWeek: number = 0
+  currentWeek: number = 0
 
   get startDayOfDisplayWeek () {
-    return this.$moment().week(this.displayWeek).startOf('week')
+    return this.$moment().week(this.displayWeek).startOf('week').format('YYYY-MM-DD')
   }
 
   get endDayOfDisplayWeek () {
-    return this.$moment().week(this.displayWeek).endOf('week')
+    const { startDayOfDisplayWeek, $moment } = this
+    const endDayOfDisplayWeek = this.$moment().week(this.displayWeek).endOf('week')
+
+    return $moment(startDayOfDisplayWeek).isSame(endDayOfDisplayWeek, 'month')
+      ? endDayOfDisplayWeek.format('DD')
+      : endDayOfDisplayWeek.format('MM-DD')
   }
 
   async created () {
+    this.displayWeek = this.$moment().week()
+    this.currentWeek = this.$moment().week()
     this.ready = false
 
     try {
-      await this.fillWeekScheduleData()
+      await this.fillWeeksScheduleData()
       this.ready = true
     } catch (e) {
       console.log(e)
     }
   }
 
-  fillWeekScheduleData () {
+  fillWeeksScheduleData () {
     const { displayWeek, preFetchWeeks } = this
 
     const weekQueue: number[] = []
     for (let week = displayWeek; week <= displayWeek + preFetchWeeks; week++) {
       weekQueue.push(week)
     }
+
     return Promise.all(weekQueue.map(async (week) => {
-      if (this.weekScheduleData[week]) { return }
+      if (this.weeksScheduleData[week]) { return }
 
       const weekData = await this.fetchAndParseWeekData(week)
-      this.weekScheduleData = Object.assign({}, this.weekScheduleData, {
+      this.weeksScheduleData = Object.assign({}, this.weeksScheduleData, {
         [week]: weekData
       })
     }))
@@ -169,12 +174,12 @@ export default class CSectionsSchedule extends Vue {
 
   prev () {
     this.displayWeek--
-    this.fillWeekScheduleData()
+    this.fillWeeksScheduleData()
   }
 
   next () {
     this.displayWeek++
-    this.fillWeekScheduleData()
+    this.fillWeeksScheduleData()
   }
 
   t (node: string, payload?: object) {

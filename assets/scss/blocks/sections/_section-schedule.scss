@@ -6,15 +6,13 @@
     justify-content: space-between;
     align-items: center;
 
-    @media screen and (max-width: theme('screens.md')) {
+    @media screen and (max-width: theme('screens.sm')) {
       flex-direction: column;
       align-items: stretch;
     }
   }
 
   @at-root #{&}__week-picker {
-    @apply text-xs;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -26,5 +24,9 @@
     @media screen and (max-width: theme('screens.sm')) {
       @apply mb-2;
     }
+  }
+
+  @at-root #{&}__notes {
+    @apply text-xs;
   }
 }
