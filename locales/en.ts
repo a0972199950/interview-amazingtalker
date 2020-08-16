@@ -1,7 +1,7 @@
 export default {
   components: {
-    Cards: {
-      CardSchedule: {
+    Sections: {
+      SectionSchedule: {
         title: 'Available times',
         note: '* All the timings listed are in your timezone: ${timezone}'
       }

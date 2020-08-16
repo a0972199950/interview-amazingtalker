@@ -1,4 +1,6 @@
-export default {
+import { Configuration, Context } from '@nuxt/types'
+
+const config: Configuration = {
   mode: 'universal',
 
   target: 'server',
@@ -59,26 +61,48 @@ export default {
 
     langDir: 'locales/',
 
-    defaultLocale: 'zh-TW',
+    // defaultLocale: 'zh-TW',
+
+    seo: false,
 
     detectBrowserLanguage: {
       useCookie: true,
       alwaysRedirect: false,
       cookieKey: 'locale'
+    },
+
+    beforeLanguageSwitch: async (oldLocale: string, newLocale: string) => {
+      try {
+        await fetch('/api/profile/locale', {
+          method: 'POST',
+          headers: new Headers({
+            'content-type': 'application/json'
+          }),
+          body: JSON.stringify({
+            locale: newLocale
+          })
+        })
+      } catch (e) {
+        console.log('Server 設定語言失敗', e)
+      }
     }
   },
 
   axios: {},
 
   build: {
+    analyze: true,
+
     transpile: [
       'lodash-es'
     ],
 
-    extend(config, ctx) {
+    extend(config: Configuration, ctx: Context) {
       config.devServer = {
         disableHostCheck: true
       }
     }
   }
 }
+
+export default config

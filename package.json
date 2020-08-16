@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nuxt-ts",
     "build": "nuxt-ts build",
+    "analyze": "nuxt build --analyze",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts generate",
     "test": "jest"

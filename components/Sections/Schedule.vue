@@ -1,6 +1,6 @@
 <template>
   <div class="section-schedule">
-    <Card :title="t('title')">
+    <Section :title="t('title')">
       <!-- 週曆 filter -->
       <div class="section-schedule__filter">
 
@@ -44,7 +44,7 @@
         v-if="ready"
         :schedule-data="weeksScheduleData[displayWeek]"
       />
-    </Card>
+    </Section>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ import { Component, Vue, Prop, Getter } from 'nuxt-property-decorator'
 
 @Component({
   components: {
-    Card: () => import('~/components/Sections/index.vue'),
+    Section: () => import('~/components/Sections/index.vue'),
     WidgetWeekCalendar: () => import('~/components/Widgets/WeekCalendar.vue')
   }
 })
@@ -183,7 +183,7 @@ export default class CSectionsSchedule extends Vue {
   }
 
   t (node: string, payload?: object) {
-    return this.$helpers.parseTranslation('components.Cards.CardSchedule', node, { ...payload })
+    return this.$helpers.parseTranslation('components.Sections.SectionSchedule', node, { ...payload })
   }
 }
 </script>

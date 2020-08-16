@@ -26,7 +26,6 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/dayjs",
       "nuxt-i18n",
       "@nuxtjs/moment"
     ]

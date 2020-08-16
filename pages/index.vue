@@ -77,13 +77,8 @@ export default class PIndex extends Vue {
     }
   }
 
-  async changeLocale (locale: string) {
-    try {
-      await this.$axios.$post('/api/profile/locale', { locale })
-      this.$router.go(0)
-    } catch (e) {
-      console.log('切換語言失敗: ', e)
-    }
+  changeLocale (locale: string) {
+    this.$i18n.setLocale(locale)
   }
 
   async changeTimezone(timezone: string) {
