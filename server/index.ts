@@ -1,21 +1,29 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-// import router from "./routers/index"
-
 import { graphqlHTTP } from 'express-graphql'
-import graphqlSchema from './graphql/schema'
-import graphqlResovers from './graphql/resolvers'
+import { gql } from './util/graphqlHelper'
 
 const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-// app.use("/", router)
+
+const schema = gql`
+  type Query {
+    hello: String
+  }
+`
+
+const resolvers = {
+  hello () {
+    return 'Hello world!'
+  }
+}
 
 app.use('/graphql', cors(), graphqlHTTP({
-  schema: graphqlSchema,
-  rootValue: graphqlResovers,
+  schema: schema,
+  rootValue: resolvers,
   graphiql: true,
   formatError (e) {
     if (!e.originalError) { return e }
