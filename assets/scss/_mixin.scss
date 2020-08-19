@@ -1,0 +1,6 @@
+@mixin generateColorHSL($key, $hex, $hue, $saturation, $lightness) {
+  --color-#{$key}: hsl(#{$hue}, #{$saturation}, #{$lightness});
+  --color-#{$key}-h: #{$hue};
+  --color-#{$key}-s: #{$saturation};
+  --color-#{$key}-l: #{$lightness};
+}

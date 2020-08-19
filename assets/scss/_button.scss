@@ -1,8 +1,8 @@
 $btn-config:(
   primary: (
     class: 'primary',
-    text-color: theme('colors.neutral.lightest'),
-    bg-color: theme('colors.primary')
+    text-color: var(--color-neutral-lightest),
+    bg-color: var(--color-primary)
   )
 );
 
@@ -33,6 +33,11 @@ $btn-config:(
     background: $bg-color;
     color: $text-color;
     border: 1px $bg-color solid;
+
+    &:hover:not(:disabled), &.active:not(:disabled) {
+      background: lighten($bg-color, 0.9);
+      border: 1px lighten($bg-color, 0.9) solid;
+    }
   }
 
   .btn-#{$class}-outline {
