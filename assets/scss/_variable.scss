@@ -1,13 +1,35 @@
+$color-config: (
+  primary: (hex: hsl(175, 98%, 40%), hue: 175, saturation: 98%, lightness: 40%),
+  neutral-lighter: (hex: hsl(0, 0%, 71%), hue: 0, saturation: 0%, lightness: 71%),
+  neutral-lightest: (hex: hsl(0, 0%, 100%), hue: 0, saturation: 0%, lightness: 100%),
+  neutral-darkest: (hex: hsl(0, 0%, 0%), hue: 0, saturation: 0%, lightness: 0%)
+);
+
+$color-config-dark: (
+  primary: (hex: hsl(175, 98%, 40%), hue: 175, saturation: 98%, lightness: 40%),
+  neutral-lighter: (hex: hsl(0, 0%, 71%), hue: 0, saturation: 0%, lightness: 71%),
+  neutral-lightest: (hex: hsl(0, 0%, 0%), hue: 0, saturation: 0%, lightness: 0%),
+  neutral-darkest: (hex: hsl(0, 0%, 100%), hue: 0, saturation: 0%, lightness: 100%)
+);
+
 :root {
-  --color-primary: #02cab9;
-  --color-neutral-lighter: #b6b6b6;
-  --color-neutral-lightest: #ffffff;
-  --color-neutral-darkest: #000000;
+  @each $key, $value in $color-config {
+    $hex: map-get($value, hex);
+    $hue: map-get($value, hue);
+    $saturation: map-get($value, saturation);
+    $lightness: map-get($value, lightness);
+
+    @include generateColorHSL($key, $hex, $hue, $saturation, $lightness);
+  }
 }
 
 [data-theme="dark"] {
-  --color-primary: #02cab9;
-  --color-neutral-lighter: #b6b6b6;
-  --color-neutral-lightest: #000000;
-  --color-neutral-darkest: #ffffff;
+  @each $key, $value in $color-config-dark {
+    $hex: map-get($value, hex);
+    $hue: map-get($value, hue);
+    $saturation: map-get($value, saturation);
+    $lightness: map-get($value, lightness);
+
+    @include generateColorHSL($key, $hex, $hue, $saturation, $lightness);
+  }
 }
