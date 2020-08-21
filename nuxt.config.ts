@@ -26,7 +26,6 @@ const config: Configuration = {
 
   plugins: [
     '~/plugins/font-awesome',
-    '~/plugins/helpers',
     '~/plugins/moment',
     '~/plugins/global-components'
   ],
@@ -50,9 +49,9 @@ const config: Configuration = {
 
   i18n: {
     locales: [
-      { code: 'zh-TW', name: '中文', file: 'zh-TW.ts' },
-      { code: 'en', name: 'English', file: 'en.ts' },
-      { code: 'ja', name: '日本語', file: 'ja.ts' },
+      { code: 'zh-TW', name: '中文', file: 'zh-TW.ts', iso: 'zh-TW' },
+      { code: 'en', name: 'English', file: 'en.ts', iso: 'en-US' },
+      { code: 'ja', name: '日本語', file: 'ja.ts', iso: 'ja' }
     ],
 
     strategy: 'no_prefix',
@@ -63,28 +62,12 @@ const config: Configuration = {
 
     // defaultLocale: 'zh-TW',
 
-    seo: false,
+    seo: true,
 
     detectBrowserLanguage: {
       useCookie: true,
       alwaysRedirect: false,
       cookieKey: 'locale'
-    },
-
-    beforeLanguageSwitch: async (oldLocale: string, newLocale: string) => {
-      try {
-        await fetch('/api/profile/locale', {
-          method: 'POST',
-          headers: new Headers({
-            'content-type': 'application/json'
-          }),
-          body: JSON.stringify({
-            locale: newLocale
-          })
-        })
-      } catch (e) {
-        console.log('Server 設定語言失敗', e)
-      }
     }
   },
 

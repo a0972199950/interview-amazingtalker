@@ -3,7 +3,7 @@ export default {
     Sections: {
       SectionSchedule: {
         title: 'Available times',
-        note: '* All the timings listed are in your timezone: ${timezone}'
+        note: '* All the timings listed are in your timezone: {timezone}'
       }
     }
   }
