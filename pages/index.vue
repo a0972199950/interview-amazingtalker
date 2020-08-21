@@ -37,9 +37,7 @@
       </select>
     </div>
 
-    <div>
-      <SectionSchedule :teacher-id="teacherId" />
-    </div>
+    <SectionSchedule :teacher-id="teacherId" />
   </div>
 </template>
 

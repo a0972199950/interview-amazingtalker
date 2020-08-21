@@ -1,51 +1,52 @@
 <template>
-  <div class="section-schedule">
-    <Section :title="$t('components.Sections.SectionSchedule.title')">
-      <!-- 週曆 filter -->
-      <div class="section-schedule__filter">
+  <Section
+    :title="$t('components.Sections.SectionSchedule.title')"
+    class="section-schedule"
+  >
+    <!-- 週曆 filter -->
+    <div class="section-schedule__filter">
 
-        <div class="section-schedule__week-picker">
-          <div class="button-group order-2 sm:order-1">
-            <button
-              data-jest="prev"
-              class="btn-primary-outline"
-              :disabled="displayWeek <= currentWeek"
-              @click="prev"
-            >
-              <font-awesome-icon :icon="['fas', 'chevron-left']" />
-            </button>
-    
-            <button
-              data-jest="next"
-              class="btn-primary-outline"
-              @click="next"
-            >
-              <font-awesome-icon :icon="['fas', 'chevron-right']" />
-            </button>
-          </div>
-
-          <span class="order-1 sm:order-2">
-            {{ startDayOfDisplayWeek }} - {{ endDayOfDisplayWeek }}
-          </span>
+      <div class="section-schedule__week-picker">
+        <div class="button-group order-2 sm:order-1">
+          <button
+            data-jest="prev"
+            class="btn-primary-outline"
+            :disabled="displayWeek <= currentWeek"
+            @click="prev"
+          >
+            <font-awesome-icon :icon="['fas', 'chevron-left']" />
+          </button>
+  
+          <button
+            data-jest="next"
+            class="btn-primary-outline"
+            @click="next"
+          >
+            <font-awesome-icon :icon="['fas', 'chevron-right']" />
+          </button>
         </div>
 
-        <span class="section-schedule__notes">
-          {{ 
-            $t('components.Sections.SectionSchedule.note', {
-              timezone: `${$moment().format('z')} (${$moment().format('Z')})`
-            }) 
-          }}
+        <span class="order-1 sm:order-2">
+          {{ startDayOfDisplayWeek }} - {{ endDayOfDisplayWeek }}
         </span>
-
       </div>
 
-      <!-- 週曆 -->
-      <WidgetWeekCalendar
-        v-if="ready"
-        :schedule-data="weeksScheduleData[displayWeek]"
-      />
-    </Section>
-  </div>
+      <span class="section-schedule__notes">
+        {{ 
+          $t('components.Sections.SectionSchedule.note', {
+            timezone: `${$moment().format('z')} (${$moment().format('Z')})`
+          }) 
+        }}
+      </span>
+
+    </div>
+
+    <!-- 週曆 -->
+    <WidgetWeekCalendar
+      v-if="ready"
+      :schedule-data="weeksScheduleData[displayWeek]"
+    />
+  </Section>
 </template>
 
 <script lang="ts">
