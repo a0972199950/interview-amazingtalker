@@ -3,7 +3,7 @@ export default {
     Sections: {
       SectionSchedule: {
         title: '授課時間',
-        note: '* 時間以 ${timezone} 顯示'
+        note: '* 時間以 {timezone} 顯示'
       }
     }
   }

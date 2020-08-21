@@ -1,6 +1,6 @@
 <template>
   <div class="section-schedule">
-    <Section :title="t('title')">
+    <Section :title="$t('components.Sections.SectionSchedule.title')">
       <!-- 週曆 filter -->
       <div class="section-schedule__filter">
 
@@ -31,7 +31,7 @@
 
         <span class="section-schedule__notes">
           {{ 
-            t('note', {
+            $t('components.Sections.SectionSchedule.note', {
               timezone: `${$moment().format('z')} (${$moment().format('Z')})`
             }) 
           }}
@@ -180,10 +180,6 @@ export default class CSectionsSchedule extends Vue {
   next () {
     this.displayWeek++
     this.fillWeeksScheduleData()
-  }
-
-  t (node: string, payload?: object) {
-    return this.$helpers.parseTranslation('components.Sections.SectionSchedule', node, { ...payload })
   }
 }
 </script>

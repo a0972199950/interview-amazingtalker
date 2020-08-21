@@ -3,7 +3,7 @@ export default {
     Sections: {
       SectionSchedule: {
         title: 'レッスン可能時間',
-        note: '* ここのタイムゾーンは ${timezone}'
+        note: '* ここのタイムゾーンは {timezone}'
       }
     }
   }
